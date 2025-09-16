@@ -209,11 +209,20 @@ planForMeBtn.addEventListener('click', async () => {
 
 // Render subtasks
 function renderSubtasks(task, container) {
+    // Clear the container
     container.innerHTML = '';
+    
+    // Create a document fragment for better performance
+    const fragment = document.createDocumentFragment();
+    
+    // Add each subtask to the fragment
     task.subtasks.forEach(subtask => {
         const subtaskElement = createSubtaskElement(task, subtask);
-        container.appendChild(subtaskElement);
+        fragment.appendChild(subtaskElement);
     });
+    
+    // Add all subtasks at once
+    container.appendChild(fragment);
 }
 
 // Create subtask element
@@ -250,9 +259,12 @@ function createSubtaskElement(parentTask, subtask) {
     });
 
     deleteBtn.addEventListener('click', () => {
-        parentTask.subtasks = parentTask.subtasks.filter(s => s.id !== subtask.id);
-        renderSubtasks(parentTask, subtaskItem.parentElement);
-        saveTasks();
+        const index = parentTask.subtasks.findIndex(s => s.id === subtask.id);
+        if (index !== -1) {
+            parentTask.subtasks.splice(index, 1); // Remove only this specific subtask
+            renderSubtasks(parentTask, subtaskItem.parentElement);
+            saveTasks();
+        }
     });
 
     return subtaskItem;

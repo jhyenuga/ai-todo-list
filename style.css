@@ -138,6 +138,12 @@ button:hover {
     border-radius: 4px;
 }
 
+.subtask-item .completed {
+    text-decoration: line-through;
+    color: #888;
+    font-style: italic;
+}
+
 .delete-btn {
     background-color: #ff4444;
     padding: 0.25rem 0.5rem;

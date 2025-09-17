@@ -235,7 +235,7 @@ function createSubtaskElement(parentTask, subtask) {
         <button class="delete-btn">×</button>
     `;
 
-    // Add subtask event listeners
+    // Get the elements
     const checkbox = subtaskItem.querySelector('input[type="checkbox"]');
     const titleSpan = subtaskItem.querySelector('span');
     const deleteBtn = subtaskItem.querySelector('.delete-btn');

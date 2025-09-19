@@ -280,10 +280,77 @@ function getSubtaskIcon(title) {
     return 'fa-circle-check';
 }
 
+function getTaskIcon(title) {
+    const title_lower = title.toLowerCase();
+    
+    // Research/Study tasks
+    if (title_lower.includes('research') || title_lower.includes('study') || title_lower.includes('learn') || title_lower.includes('investigate')) {
+        return 'fa-book';
+    }
+    
+    // Meeting/Discussion tasks
+    if (title_lower.includes('meet') || title_lower.includes('discuss') || title_lower.includes('call') || title_lower.includes('present')) {
+        return 'fa-users';
+    }
+    
+    // Document/Write tasks
+    if (title_lower.includes('document') || title_lower.includes('write') || title_lower.includes('draft') || title_lower.includes('report')) {
+        return 'fa-file-lines';
+    }
+    
+    // Email/Communication tasks
+    if (title_lower.includes('email') || title_lower.includes('send') || title_lower.includes('contact') || title_lower.includes('message')) {
+        return 'fa-envelope';
+    }
+    
+    // Design/Creative tasks
+    if (title_lower.includes('design') || title_lower.includes('create') || title_lower.includes('draw') || title_lower.includes('sketch')) {
+        return 'fa-palette';
+    }
+    
+    // Testing/Review tasks
+    if (title_lower.includes('test') || title_lower.includes('check') || title_lower.includes('review') || title_lower.includes('verify')) {
+        return 'fa-clipboard-check';
+    }
+    
+    // Planning/Scheduling tasks
+    if (title_lower.includes('plan') || title_lower.includes('schedule') || title_lower.includes('organize') || title_lower.includes('prepare')) {
+        return 'fa-calendar';
+    }
+    
+    // Development/Implementation tasks
+    if (title_lower.includes('implement') || title_lower.includes('code') || title_lower.includes('develop') || title_lower.includes('build')) {
+        return 'fa-code';
+    }
+    
+    // Analysis/Data tasks
+    if (title_lower.includes('analyze') || title_lower.includes('data') || title_lower.includes('report') || title_lower.includes('calculate')) {
+        return 'fa-chart-line';
+    }
+    
+    // Update/Modify tasks
+    if (title_lower.includes('update') || title_lower.includes('modify') || title_lower.includes('change') || title_lower.includes('revise')) {
+        return 'fa-pen-to-square';
+    }
+    
+    // Deadline/Priority tasks
+    if (title_lower.includes('urgent') || title_lower.includes('priority') || title_lower.includes('deadline') || title_lower.includes('asap')) {
+        return 'fa-bell';
+    }
+    
+    // Bug/Issue tasks
+    if (title_lower.includes('bug') || title_lower.includes('fix') || title_lower.includes('issue') || title_lower.includes('problem')) {
+        return 'fa-bug';
+    }
+
+    // Default icon
+    return 'fa-circle-dot';
+}
+
 function createSubtaskElement(parentTask, subtask) {
     const subtaskItem = document.createElement('div');
     subtaskItem.className = 'subtask-item';
-    const iconClass = getSubtaskIcon(subtask.title);
+    const iconClass = getTaskIcon(subtask.title);
     subtaskItem.innerHTML = `
         <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
         <i class="fas ${iconClass} subtask-icon"></i>

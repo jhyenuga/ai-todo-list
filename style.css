@@ -147,6 +147,33 @@ button:hover {
     padding: 0.5rem;
     background-color: #f9f9f9;
     border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.subtask-icon {
+    width: 20px;
+    text-align: center;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+/* Icon color themes */
+.fa-book { color: #2196F3; }             /* Research/Study */
+.fa-users { color: #4CAF50; }            /* Meetings */
+.fa-file-lines { color: #9C27B0; }       /* Documentation */
+.fa-envelope { color: #00BCD4; }         /* Communication */
+.fa-palette { color: #E91E63; }          /* Design */
+.fa-clipboard-check { color: #4CAF50; }  /* Testing */
+.fa-calendar { color: #FF9800; }         /* Planning */
+.fa-code { color: #607D8B; }             /* Development */
+.fa-chart-line { color: #673AB7; }       /* Analysis */
+.fa-pen-to-square { color: #795548; }    /* Updates */
+.fa-bell { color: #f44336; }             /* Priority */
+.fa-bug { color: #FF5722; }              /* Bugs */
+.fa-circle-dot { color: #9E9E9E; }       /* Default */
+
+.subtask-item:hover .subtask-icon {
+    transform: scale(1.1);
 }
 
 .subtask-item .completed {

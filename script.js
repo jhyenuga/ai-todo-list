@@ -13,22 +13,98 @@ const apiKeyInput = document.getElementById('apiKey');
 
 // Task Data Structure
 let tasks = [];
+let archivedTasks = [];
 
-// Settings storage key
+// Storage keys
 const SETTINGS_KEY = 'todoAppSettings';
+const TASKS_KEY = 'tasks';
+const ARCHIVED_TASKS_KEY = 'archivedTasks';
 
 // Load tasks from localStorage
 function loadTasks() {
-    const savedTasks = localStorage.getItem('tasks');
+    const savedTasks = localStorage.getItem(TASKS_KEY);
+    const savedArchivedTasks = localStorage.getItem(ARCHIVED_TASKS_KEY);
+    
     if (savedTasks) {
         tasks = JSON.parse(savedTasks);
-        renderTasks();
     }
+    
+    if (savedArchivedTasks) {
+        archivedTasks = JSON.parse(savedArchivedTasks);
+    }
+    
+    renderTasks();
+    renderArchivedTasks();
 }
 
 // Save tasks to localStorage
 function saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+    localStorage.setItem(ARCHIVED_TASKS_KEY, JSON.stringify(archivedTasks));
+}
+
+// Archive a task
+function archiveTask(taskId) {
+    const taskIndex = tasks.findIndex(t => t.id === taskId);
+    if (taskIndex !== -1) {
+        const task = tasks[taskIndex];
+        task.archiveDate = new Date().toISOString();
+        archivedTasks.unshift(task);
+        tasks.splice(taskIndex, 1);
+        saveTasks();
+        renderTasks();
+        renderArchivedTasks();
+    }
+}
+
+// Render archived tasks
+function renderArchivedTasks() {
+    const archiveList = document.getElementById('archiveList');
+    archiveList.innerHTML = '';
+    
+    if (archivedTasks.length === 0) {
+        archiveList.innerHTML = '<div class="no-tasks">No archived tasks</div>';
+        return;
+    }
+
+    archivedTasks.forEach(task => {
+        const taskElement = createArchivedTaskElement(task);
+        archiveList.appendChild(taskElement);
+    });
+}
+
+// Create archived task element
+function createArchivedTaskElement(task) {
+    const taskItem = document.createElement('div');
+    taskItem.className = 'task-item';
+    const archiveDate = new Date(task.archiveDate).toLocaleDateString();
+    
+    taskItem.innerHTML = `
+        <div class="task-content">
+            <div class="task-title">
+                <input type="checkbox" checked disabled>
+                <span class="completed">${task.title}</span>
+                <span class="archive-date">Archived on ${archiveDate}</span>
+            </div>
+            <div class="subtasks"></div>
+        </div>
+    `;
+
+    // Render completed subtasks
+    const subtasksContainer = taskItem.querySelector('.subtasks');
+    if (task.subtasks && task.subtasks.length > 0) {
+        task.subtasks.forEach(subtask => {
+            const subtaskElement = document.createElement('div');
+            subtaskElement.className = 'subtask-item';
+            subtaskElement.innerHTML = `
+                <input type="checkbox" ${subtask.completed ? 'checked' : ''} disabled>
+                <span class="${subtask.completed ? 'completed' : ''}">${subtask.title}</span>
+            `;
+            subtasksContainer.appendChild(subtaskElement);
+        });
+    }
+
+    return taskItem;
 }
 
 // Create a new task
@@ -174,7 +250,17 @@ planForMeBtn.addEventListener('click', async () => {
 });    checkbox.addEventListener('change', () => {
         task.completed = checkbox.checked;
         titleSpan.classList.toggle('completed', task.completed);
-        saveTasks();
+        
+        if (task.completed) {
+            const shouldArchive = confirm('Would you like to move this completed task to the archive?');
+            if (shouldArchive) {
+                archiveTask(task.id);
+            } else {
+                saveTasks();
+            }
+        } else {
+            saveTasks();
+        }
     });
 
     titleSpan.addEventListener('blur', () => {
@@ -609,6 +695,30 @@ function clearSettings() {
     deploymentNameInput.value = '';
     apiKeyInput.value = '';
 }
+
+// Tab Switching
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Update button states
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Update content visibility
+        const tabName = button.getAttribute('data-tab');
+        document.getElementById('activeTab').style.display = tabName === 'active' ? 'block' : 'none';
+        document.getElementById('archiveTab').style.display = tabName === 'archive' ? 'block' : 'none';
+
+        // Refresh the appropriate view
+        if (tabName === 'archive') {
+            renderArchivedTasks();
+        } else {
+            renderTasks();
+        }
+    });
+});
 
 // Settings Modal Event Listeners
 settingsBtn.addEventListener('click', () => {

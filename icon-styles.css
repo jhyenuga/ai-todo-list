@@ -1,0 +1,29 @@
+.subtask-icon {
+    margin-right: 8px;
+    width: 16px;
+    color: #666;
+}
+
+/* Icon-specific colors */
+.fa-magnifying-glass { color: #2196F3; }  /* Research - Blue */
+.fa-comments { color: #4CAF50; }          /* Communication - Green */
+.fa-file-lines { color: #9C27B0; }        /* Document - Purple */
+.fa-palette { color: #FF9800; }           /* Design - Orange */
+.fa-clipboard-check { color: #4CAF50; }   /* Testing - Green */
+.fa-calendar { color: #E91E63; }          /* Planning - Pink */
+.fa-code { color: #607D8B; }              /* Implementation - Blue Grey */
+.fa-eye { color: #795548; }               /* Review - Brown */
+.fa-pen-to-square { color: #FF5722; }     /* Update - Deep Orange */
+.fa-circle-check { color: #666; }         /* Default - Grey */
+
+/* Add subtle hover effect */
+.subtask-icon:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* When subtask is completed, dim the icon */
+.subtask-item .completed + .subtask-icon,
+.subtask-item .completed ~ .subtask-icon {
+    opacity: 0.5;
+}

@@ -67,14 +67,15 @@ function createTaskElement(task) {
         <div class="task-content">
             <div class="task-title">
                 <input type="checkbox" ${task.completed ? 'checked' : ''}>
+                <i class="fas fa-tasks task-icon"></i>
                 <span class="editable ${task.completed ? 'completed' : ''}" contenteditable="true">${task.title}</span>
                 <button class="plan-for-me">
                     <i class="fas fa-wand-magic-sparkles"></i> Plan For Me
                 </button>
-                <button class="delete-btn">×</button>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
             </div>
             <div class="subtasks"></div>
-            <button class="add-subtask">Add Subtask</button>
+            <button class="add-subtask"><i class="fas fa-plus"></i> Add Subtask</button>
         </div>
     `;
 
@@ -226,13 +227,68 @@ function renderSubtasks(task, container) {
 }
 
 // Create subtask element
+// Get appropriate icon for subtask based on its content
+function getSubtaskIcon(title) {
+    const title_lower = title.toLowerCase();
+    
+    // Research/Analysis tasks
+    if (title_lower.includes('research') || title_lower.includes('analyze') || title_lower.includes('study') || title_lower.includes('review')) {
+        return 'fa-magnifying-glass';
+    }
+    
+    // Communication tasks
+    if (title_lower.includes('email') || title_lower.includes('call') || title_lower.includes('contact') || title_lower.includes('meet') || title_lower.includes('discussion')) {
+        return 'fa-comments';
+    }
+    
+    // Document/Writing tasks
+    if (title_lower.includes('write') || title_lower.includes('document') || title_lower.includes('draft') || title_lower.includes('create')) {
+        return 'fa-file-lines';
+    }
+    
+    // Design tasks
+    if (title_lower.includes('design') || title_lower.includes('draw') || title_lower.includes('sketch')) {
+        return 'fa-palette';
+    }
+    
+    // Testing/Checking tasks
+    if (title_lower.includes('test') || title_lower.includes('check') || title_lower.includes('verify') || title_lower.includes('validate')) {
+        return 'fa-clipboard-check';
+    }
+    
+    // Planning tasks
+    if (title_lower.includes('plan') || title_lower.includes('schedule') || title_lower.includes('organize')) {
+        return 'fa-calendar';
+    }
+    
+    // Implementation/Coding tasks
+    if (title_lower.includes('implement') || title_lower.includes('code') || title_lower.includes('develop') || title_lower.includes('build')) {
+        return 'fa-code';
+    }
+    
+    // Review/Feedback tasks
+    if (title_lower.includes('review') || title_lower.includes('feedback') || title_lower.includes('evaluate')) {
+        return 'fa-eye';
+    }
+    
+    // Update/Modify tasks
+    if (title_lower.includes('update') || title_lower.includes('modify') || title_lower.includes('change') || title_lower.includes('edit')) {
+        return 'fa-pen-to-square';
+    }
+    
+    // Default icon for other tasks
+    return 'fa-circle-check';
+}
+
 function createSubtaskElement(parentTask, subtask) {
     const subtaskItem = document.createElement('div');
     subtaskItem.className = 'subtask-item';
+    const iconClass = getSubtaskIcon(subtask.title);
     subtaskItem.innerHTML = `
         <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
+        <i class="fas ${iconClass} subtask-icon"></i>
         <span class="editable ${subtask.completed ? 'completed' : ''}" contenteditable="true">${subtask.title}</span>
-        <button class="delete-btn">×</button>
+        <button class="delete-btn"><i class="fas fa-times"></i></button>
     `;
 
     // Get the elements
